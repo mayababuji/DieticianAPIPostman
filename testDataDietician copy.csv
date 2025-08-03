@@ -1,0 +1,15 @@
+﻿requestType,userLoginEmail,password,scenario,Firstname,Lastname,ContactNumber,DateOfBirth,Email,HospitalName,HospitalStreet,HospitalCity,HospitalPincode,Education,Allergy,FoodPreference,CuisineCategory,Weight,Height,Temperature,SP,DP
+createAdmin,Team401@gmail.com,,Missing Password,,,,,,,,,,,,,,,,,,
+createAdmin,,test,Missing Email,,,,,,,,,,,,,,,,,,
+createAdmin,Team401@gmail.com,test1,Incorrect Password,,,,,,,,,,,,,,,,,,
+createAdmin,,,Missing both,,,,,,,,,,,,,,,,,,
+createAdmin,Team401@gmail.com,test,Valid Login,,,,,,,,,,,,,,,,,,
+createDietician,,,,teamfourfirstname,teamfourlastname,6282539192,1993-07-23,teamfour2003@aollzw.com,teamfourhospital,33street,bangalore,991291,Medicine,,,,,,,,
+createPatient,,,,teamfourpatientfirstname,teamfourpatientlastname,8229281199,1969-06-01,teamfourpatient2013@aollzw.com,,,,,,PEANUT,Vegetarian,Indian,65.5,5.4,24,90,60
+getAllPatient,,,,,,,,,,,,,,,,,,,,,
+getMorbidity,,,,,,,,,,,,,,,,,,,,,
+getMorbidityName,,,,,,,,,,,,,,,,,,,,,
+updateDietician,,,,teamfourfirstnameupdated,teamfourlastnameupdated,6282539099,1993-07-13,teamfour2003@aollzw.com,teamfourhospitalupdated,33streetupdated,bangaloreupdated,991299,Medicineupdated,,,,,,,,
+updatePatient,,,,teamfourpatientfirstnameupdated,teamfourpatientlastnameupdated,8229231192,1943-08-23,teamfourpatient2013@aollzwupdated.com,,,,,,egg,Vegetarian,Bengali,66.5,5.8,25,92,63
+logoutDietician,,,,,,,,,,,,,,,,,,,,,
+deleteDietician,,,,,,,,,,,,,,,,,,,,,
