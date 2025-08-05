@@ -743,6 +743,171 @@
 			"name": "Patient",
 			"item": [
 				{
+					"name": "Admin Login Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "79cfc374-32c9-4416-aa93-233dc104bc49",
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log(\"Running scenario:\", pm.iterationData.get(\"scenario\"));",
+									"const scenario = pm.iterationData.get(\"scenario\");",
+									"if (scenario === \"Valid Login\") {",
+									"    const admin_token = response.token;",
+									"    pm.environment.set(\"admin_token\", admin_token);",
+									"    pm.test(\"Login should succeed\", function () {",
+									"        pm.response.to.have.status(200);",
+									"        pm.expect(pm.response.json()).to.have.property(\"token\");",
+									"    });",
+									"} else {",
+									"    pm.test(\"Login should fail\", function () {",
+									"        pm.response.to.have.status(401); // Unauthorized status code for failed login",
+									"        if (scenario == \"Missing Email\"|| scenario == \"Missing both\"){",
+									"            pm.expect(pm.response.json()).to.have.property(\"error\");",
+									"            console.log(\"The error message is \"+response.message);",
+									"        }",
+									"        else{",
+									"            pm.expect(pm.response.json()).to.have.property(\"errorCode\");",
+									"            console.log(\"The error message is \"+response.errorMessage);",
+									"        }",
+									"",
+									"    ",
+									"    });",
+									"}",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "e51135ac-6932-490e-a597-6ab7b4b77eb0",
+								"exec": [
+									"const requestType = pm.iterationData.get(\"requestType\");",
+									"console.log(\"Running scenario:\", pm.iterationData.get(\"scenario\"));",
+									"console.log(\"The request type in POST Admin Login is \"+ requestType)",
+									"if (requestType!=\"createAdmin\"){",
+									"    pm.execution.skipRequest();",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"id": "7a8d3c9e-b9ba-4157-ad1c-e1537c9d6907",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userLoginEmail\": \"{{userLoginEmail}}\",\n  \"password\": \"{{password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{dieticianBaseUrl}}dietician/login"
+					},
+					"response": []
+				},
+				{
+					"name": "create dietician Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e1dd394d-69a9-4d0c-a919-3c4c213c7451",
+								"exec": [
+									"// Parse the JSON response",
+									"const response = pm.response.json();",
+									"",
+									"// Extract the dietician ID",
+									"const dieticianId = response.id;",
+									"",
+									"// Set it as a collection variable",
+									"pm.collectionVariables.set(\"dieticianID\", dieticianId);",
+									"",
+									"",
+									"console.log(\"Dietician ID saved in collection variable: \" + dieticianId);",
+									"",
+									"// Extract the emailID of dietician ",
+									"let dieticianEmailId = response.Email;",
+									"",
+									"// Set it as a collection variable",
+									"pm.collectionVariables.set(\"dieticianEmailId\", dieticianEmailId);",
+									"",
+									"// Optional: log it for debug",
+									"console.log(\"Dietician EMAIL ID saved in collection variable: \" + dieticianEmailId);",
+									"",
+									"// Extract the emailID password of dietician ",
+									"let dieticianPassword = response.loginPassword;",
+									"",
+									"// Set it as a collection variable",
+									"pm.collectionVariables.set(\"dieticianPassword\", dieticianPassword);",
+									"",
+									"// Optional: log it for debug",
+									"console.log(\"Dietician EMAIL password saved in collection variable: \" + dieticianPassword);",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "0cce92aa-eb8e-4772-8434-f6fdfae3482b",
+								"exec": [
+									"const requestType = pm.iterationData.get(\"requestType\");",
+									"console.log(\"The request type in create dietician is \"+ requestType)",
+									"if (requestType!=\"createDietician\"){",
+									"    pm.execution.skipRequest();",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"id": "b06c7a50-ae11-42ff-9f66-70318bd78cfd",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{admin_token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Firstname\": \"{{Firstname}}\",\n  \"Lastname\": \"{{Lastname}}\",\n  \"ContactNumber\": \"{{ContactNumber}}\",\n  \"DateOfBirth\": \"{{DateOfBirth}}\",\n  \"Email\": \"{{Email}}\",\n  \"HospitalName\": \"{{HospitalName}}\",\n  \"HospitalStreet\": \"{{HospitalStreet}}\",\n  \"HospitalCity\": \"{{HospitalCity}}\",\n  \"HospitalPincode\": \"{{HospitalPincode}}\",\n  \"Education\": \"{{Education}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{dieticianBaseUrl}}dietician/dietician"
+					},
+					"response": []
+				},
+				{
 					"name": "create new patient",
 					"event": [
 						{
@@ -1444,6 +1609,18 @@
 							]
 						},
 						"url": "{{dieticianBaseUrl}}dietician/patient/{{patientId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"id": "35c93e66-cb9a-470e-a86e-674c1ed7b330",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": []
 					},
 					"response": []
 				}
